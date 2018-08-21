@@ -24,9 +24,8 @@ class NotificationService: UNNotificationServiceExtension {
 
         guard
             let notificationContent = self.bestAttemptContent,
-            let noteID = notificationContent.userInfo["note_id"] as? Int,
-            let aps = notificationContent.userInfo["aps"] as? NSDictionary,
-            let apsAlert = aps["alert"] as? String,
+            let apsAlert = notificationContent.apsAlert,
+            let noteID = notificationContent.noteID,
             token != nil
         else
         {
@@ -40,8 +39,7 @@ class NotificationService: UNNotificationServiceExtension {
         let service = NotificationSyncServiceRemote(wordPressComRestApi: api)
         self.notificationService = service
 
-        let identifiers = [ String(noteID) ]
-        service.loadNotes(noteIds: identifiers) { [tracks] error, notifications in
+        service.loadNotes(noteIds: [noteID]) { [tracks] error, notifications in
             defer {
                 contentHandler(notificationContent)
             }
@@ -69,6 +67,22 @@ class NotificationService: UNNotificationServiceExtension {
                     !notificationText.isEmpty {
 
                     notificationContent.body = notificationText
+                }
+
+                let attributes: [NSAttributedStringKey: Any] = [
+                    NSAttributedStringKey.foregroundColor: UIColor.red,
+                    NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 20)
+                ]
+                let attributedSubject = NSAttributedString(string: "Test", attributes: attributes)
+
+                let subjectRange = NSRange(location: 0, length: attributedSubject.length)
+                let subjectEncodingAttributes: [NSAttributedString.DocumentAttributeKey: Any] = [
+                    .documentType: NSAttributedString.DocumentType.html
+                ]
+
+                let attributedSubjectData = try? attributedSubject.data(from: subjectRange, documentAttributes: subjectEncodingAttributes)
+                if let subjectData = attributedSubjectData {
+                    notificationContent.userInfo["attributedSubjectData"] = subjectData
                 }
 
                 tracks.trackNotificationAssembled()
