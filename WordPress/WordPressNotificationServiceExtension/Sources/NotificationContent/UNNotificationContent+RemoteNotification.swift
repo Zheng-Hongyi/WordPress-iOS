@@ -25,11 +25,11 @@ extension UNNotificationContent {
 // MARK: - Describes userInfo keys used to exchange data between extension types.
 
 private extension CodingUserInfoKey {
+    static let attributedBody = CodingUserInfoKey(rawValue: "attributedBody")!
+    static let attributedSubject = CodingUserInfoKey(rawValue: "attributedSubject")!
+    static let gravatarURLString = CodingUserInfoKey(rawValue: "gravatarURLString")!
+    static let noticonText = CodingUserInfoKey(rawValue: "noticon")!
     static let noteIdentifier = CodingUserInfoKey(rawValue: "note_id")!
-//    static let gravatarURLString = CodingUserInfoKey(rawValue: "gravatarURLString")!
-//    static let noticonText = CodingUserInfoKey(rawValue: "noticon")!
-//    static let subject = CodingUserInfoKey(rawValue: "subject")!
-//    static let body = CodingUserInfoKey(rawValue: "body")!
 }
 
 // MARK: - Supports APNS notification related to `RemoteNotification`

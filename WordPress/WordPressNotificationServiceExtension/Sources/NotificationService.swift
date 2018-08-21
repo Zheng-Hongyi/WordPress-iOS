@@ -56,34 +56,42 @@ class NotificationService: UNNotificationServiceExtension {
                 let body = notification.body,
                 let bodyBlocks = body as? [[String: AnyObject]] {
 
-                let parser = RemoteNotificationActionParser()
-                let blocks = NotificationContentFactory.content(
-                    from: bodyBlocks,
-                    actionsParser: parser,
-                    parent: notification)
+                // Instantiate content formatter with all of the necessary bits...
+                let contentFormatter = RichNotificationContentFormatter()
+//                let parser = RemoteNotificationActionParser()
+//                let blocks = NotificationContentFactory.content(
+//                    from: bodyBlocks,
+//                    actionsParser: parser,
+//                    parent: notification)
+//
+//                if let comment: FormattableCommentContent = FormattableContentGroup.blockOfKind(.comment, from: blocks),
+//                    let notificationText = comment.text,
+//                    !notificationText.isEmpty {
+//
+//                    notificationContent.body = notificationText
+//                }
+                //notificationContent.body = contentFormatter.formatBody()
 
-                if let comment: FormattableCommentContent = FormattableContentGroup.blockOfKind(.comment, from: blocks),
-                    let notificationText = comment.text,
-                    !notificationText.isEmpty {
+                let attributedBody = ""
+                let attributedSubject = ""
+                let gravatarURLString = notification.icon
+                let noticon = notification.noticon
 
-                    notificationContent.body = notificationText
-                }
-
-                let attributes: [NSAttributedStringKey: Any] = [
-                    NSAttributedStringKey.foregroundColor: UIColor.red,
-                    NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 20)
-                ]
-                let attributedSubject = NSAttributedString(string: "Test", attributes: attributes)
-
-                let subjectRange = NSRange(location: 0, length: attributedSubject.length)
-                let subjectEncodingAttributes: [NSAttributedString.DocumentAttributeKey: Any] = [
-                    .documentType: NSAttributedString.DocumentType.html
-                ]
-
-                let attributedSubjectData = try? attributedSubject.data(from: subjectRange, documentAttributes: subjectEncodingAttributes)
-                if let subjectData = attributedSubjectData {
-                    notificationContent.userInfo["attributedSubjectData"] = subjectData
-                }
+//                let attributes: [NSAttributedStringKey: Any] = [
+//                    NSAttributedStringKey.foregroundColor: UIColor.red,
+//                    NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 20)
+//                ]
+//                let attributedSubject = NSAttributedString(string: "Test", attributes: attributes)
+//
+//                let subjectRange = NSRange(location: 0, length: attributedSubject.length)
+//                let subjectEncodingAttributes: [NSAttributedString.DocumentAttributeKey: Any] = [
+//                    .documentType: NSAttributedString.DocumentType.html
+//                ]
+//
+//                let attributedSubjectData = try? attributedSubject.data(from: subjectRange, documentAttributes: subjectEncodingAttributes)
+//                if let subjectData = attributedSubjectData {
+//                    notificationContent.userInfo["attributedSubjectData"] = subjectData
+//                }
 
                 tracks.trackNotificationAssembled()
             }
